@@ -67,17 +67,26 @@ public class PlayerMovement : Movement
         moveRight = true;
     }
 
+    protected void OnTriggerEnter2D(Collider2D collider)
+    {
+        base.OnTriggerEnter2D(collider);
+        if (collider.tag == "Ground")
+        {
+            ColliderState = 0;
+        }
+    }
+
     protected void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.tag == "Ground" && !groundChecker.IsTouching(collider))
         {
-            IsGrounded = false;
+            //IsGrounded = false;
             moveLeft = true;
             moveRight = true;
         }
     }
 
-    protected override void Attack1()
+    protected override IEnumerator Attack1()
     {
         if (!Damaged)
         {
@@ -92,5 +101,6 @@ public class PlayerMovement : Movement
             }
             //lastClickTime = Time.time;
         }
+        yield return null;
     }
 }

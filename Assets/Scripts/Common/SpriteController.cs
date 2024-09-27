@@ -41,6 +41,7 @@ public abstract class SpriteController : MonoBehaviour
         yield return new WaitUntil(() => movement.Velocity.y <= 0);
 
         if(Attacking == 0 && Jumping)
-            anim.Play("Base Layer.land");
+            anim.Play("Base Layer.idle");
+            //anim.Play("Base Layer.land"); ÏÅÐÅÐÈÑÎÂÀÒÜ È ÄÎÁÀÂÈÒÜ ÀÍÈÌÀÖÈÞ ÏÐÈÇÅÌËÅÍÈß
     }
 }

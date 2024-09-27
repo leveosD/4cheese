@@ -78,13 +78,12 @@ public class EnemyController : CharacterController
         }
     }
 
-    [SerializeField] bool damaged;
-    public override bool Damaged
+    [SerializeField] DamageType damaged;
+    public override DamageType Damaged
     {
         get { return damaged; }
         set
         {
-            Debug.Log(gameObject.name);
             damaged = value;
             spriteContr.Damaged = value;
             movementContr.Damaged = value;
@@ -165,6 +164,7 @@ public class EnemyController : CharacterController
     {
         if (collision.collider.tag == "Ground")
         {
+            if(gameObject.name == "DogPrefab (1)") Debug.Log("Parent");
             Damaged = false;
             //Jumping = false;
         }
@@ -190,6 +190,6 @@ public class EnemyController : CharacterController
 
     protected void NotDamaged()
     {
-        Damaged = false;
+        //Damaged = false;
     }
 }

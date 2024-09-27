@@ -27,19 +27,50 @@ public abstract class Movement : MonoBehaviour
         get { return rb.velocity; }
     }
 
-    [SerializeField] bool isGrounded;
-    public bool IsGrounded
-    {
-        get { return isGrounded; }
-        protected set { isGrounded = value; }
-    }
-
     public bool IsTrigger
     {
         get { return col.isTrigger; }
         set { col.isTrigger = value;}
     }
 
+    public bool IsGrounded
+    {
+        get
+        {
+            //return groundChecker.IsTouching(collider);
+            List<Collider2D> colliders = new List<Collider2D>();
+            ContactFilter2D filter = new ContactFilter2D();
+            filter.layerMask = 1 << LayerMask.NameToLayer("Ground");
+            groundChecker.GetContacts(colliders);
+            return colliders.Count > 0;
+        }
+    }
+
+    /*[SerializeField] int colliderState;
+    public int ColliderState
+    {
+        get { return colliderState; }
+        set
+        {
+            if (value != colliderState)
+            {
+                colliderState = value;
+                if (value == 1)
+                {
+                    col.size = size[1];
+                    col.offset = new Vector2(offset[1].x * direction, offset[1].y);
+                    groundChecker.offset = new Vector2(groundChecker.offset.x, groundTriggerOffset[1]);
+                }
+                else if (value == 0)
+                {
+                    col.size = size[0];
+                    col.offset = new Vector2(offset[0].x * direction, offset[0].y);
+                    groundChecker.offset = new Vector2(groundChecker.offset.x, groundTriggerOffset[0]);
+                }
+            }
+        }
+    }*/
+    
     [SerializeField] int colliderState;
     public int ColliderState
     {
@@ -65,6 +96,15 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
+    [SerializeField] protected float smoothTime;
+
+    IEnumerator SmoothChanges()
+    {
+        col.size = Vector2.LerpUnclamped(size[0], size[1], smoothTime);
+        col.offset = Vector2.LerpUnclamped(offset[0], offset[1], smoothTime);
+        yield return null;
+    }
+
     [SerializeField] bool moving;
     public bool Moving
     {
@@ -75,7 +115,7 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
-    protected delegate void Attacks();
+    protected delegate IEnumerator Attacks();
     protected Attacks[] attacks;
     public int AttacksLength
     {
@@ -89,8 +129,7 @@ public abstract class Movement : MonoBehaviour
         {
             if (value != attacking && value != 0 && (value-1) < attacks.Length)
             {
-                attacks[value - 1]();
-                
+                StartCoroutine(attacks[value - 1]());
             }
             attacking = value;
         }
@@ -102,7 +141,7 @@ public abstract class Movement : MonoBehaviour
         get { return jumping; }
         set
         {
-            if (value == true && jumping != true)
+            if (value == true)
                 Jump();
             jumping = value;
         }
@@ -116,7 +155,7 @@ public abstract class Movement : MonoBehaviour
         {
             damaged = value;
             trigger.enabled = false;
-            ColliderState = 0;
+            //ColliderState = 0;
             /*rb.velocity = Vector2.zero;
             rb.AddForce(value, ForceMode2D.Impulse);*/
         }
@@ -129,7 +168,7 @@ public abstract class Movement : MonoBehaviour
         col = GetComponent<CapsuleCollider2D>();
         groundChecker = GetComponents<BoxCollider2D>()[0];
         //zeroVelocity = false;
-        IsGrounded = false;
+        //IsGrounded = false;
         trigger = GetComponents<BoxCollider2D>()[1];
         //moveLeft = true;
         //moveRight = true;
@@ -161,11 +200,11 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
-    protected abstract void Attack1();
+    protected abstract IEnumerator Attack1();
 
     protected void ChangeCollider(int state)
     {
-        //ColliderState = state;
+        ColliderState = state;
     }
 
     protected int IsSidePlatform(Collision2D collision)
@@ -223,13 +262,13 @@ public abstract class Movement : MonoBehaviour
                 gameObject.GetComponent<CharacterController>().AttackType, 1);
 
         }
-        else if (collider.tag == "Ground")
+        /*else if (collider.tag == "Ground")
         {
             ColliderState = 0;
-        }
+        }*/
     }
 
-    protected void OnTriggerStay2D(Collider2D collider)
+    /*protected void OnTriggerStay2D(Collider2D collider)
     {
         if(collider.tag == "Ground")
             IsGrounded = true;
@@ -237,13 +276,13 @@ public abstract class Movement : MonoBehaviour
 
     protected void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.tag == "Ground" && !groundChecker.IsTouching(collider))
+        if (collider.tag == "Ground" && !IsGrounded(collider))
         {
             IsGrounded = false;
             //moveLeft = true;
             //moveRight = true;
         }
-    }
+    }*/
 
     public void SetAttackDirection()
     {

@@ -1,5 +1,6 @@
 public enum DamageType
 {
     FIRE,
-    PUNCH
+    PUNCH,
+    NONE
 }

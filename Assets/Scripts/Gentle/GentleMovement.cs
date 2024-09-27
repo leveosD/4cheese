@@ -21,7 +21,7 @@ public class GentleMovement : Movement
         size = new Vector2[] { new Vector2(0.52f, 0.94f), new Vector2(0.73f, 0.67f) };
         groundTriggerOffset = new Vector2(-0.55f, -0.4f);
         bulletOffset = new Vector2(0.6f, -0.2f);
-        burstOffset = new Vector2(1.03f, 1);
+        burstOffset = new Vector2(1.03f, 0.6f);
         ColliderState = 0;
         attacks = new Attacks[2];
         attacks[0] = new Attacks(Attack1);
@@ -34,34 +34,26 @@ public class GentleMovement : Movement
             Move();
     }
 
-    protected override void Attack1()
+    protected override IEnumerator Attack1()
     {
         if (IsGrounded && !Damaged)
         {
-            StartCoroutine(Shot());
+            yield return new WaitForSeconds(0.07f);
+            bullet = Instantiate(bulletPrefab);
+            bullet.transform.position = this.transform.position + new Vector3(direction * bulletOffset.x, bulletOffset.y, 0);
+            bullet.GetComponent<BulletBehaviour>().SetDirection(direction);
         }
+        yield return null;
     }
 
-    protected void Attack2()
+    protected IEnumerator Attack2()
     {
         if (IsGrounded && !Damaged)
         {
-            StartCoroutine(Retreat());
+            yield return new WaitForSeconds(0.2f);
+            rb.AddForce(new Vector2(-direction * 1.2f, 0.8f), ForceMode2D.Impulse);
         }
-    }
-
-    IEnumerator Shot()
-    {
-        yield return new WaitForSeconds(0.07f);
-        bullet = Instantiate(bulletPrefab);
-        bullet.transform.position = this.transform.position + new Vector3(direction * bulletOffset.x, bulletOffset.y, 0);
-        bullet.GetComponent<BulletBehaviour>().SetDirection(direction);
-    }
-
-    IEnumerator Retreat()
-    {
-        yield return new WaitForSeconds(0.2f);
-        rb.AddForce(new Vector2(-direction * 1.2f, 0.8f), ForceMode2D.Impulse);
+        yield return null;
     }
 
     void BurstInstantiate()

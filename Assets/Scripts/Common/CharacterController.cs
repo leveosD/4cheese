@@ -99,11 +99,12 @@ public abstract class CharacterController : MonoBehaviour
     }*/
 
 
-    IEnumerator Stunned()
+    /*IEnumerator Stunned()
     {
         yield return new WaitForSeconds(stunTime);
         Damaged = false;
-    }
+        Debug.Log("Stunned");
+    }*/
 
     protected abstract void Death();
 

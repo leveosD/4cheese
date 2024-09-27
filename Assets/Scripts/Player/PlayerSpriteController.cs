@@ -45,7 +45,8 @@ public class PlayerSpriteController : SpriteController
             //anim.SetBool("jumping", value);
             if (value == true && !Jumping)
             {
-                anim.Play("Base Layer.jump");
+                anim.Play("Base Layer.idle");
+                //anim.Play("Base Layer.jump"); œ≈–≈–»—Œ¬¿“‹ » ƒŒ¡¿¬»“‹ ¿Õ»Ã¿÷»ﬁ œ–€∆ ¿
                 StartCoroutine(JumpState());
             }
             else

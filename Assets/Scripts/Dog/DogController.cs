@@ -24,14 +24,11 @@ public class DogController : EnemyController
         }
     }
 
-    IEnumerator wakeup;
-
     protected void Start()
     {
         base.Start();
         dogSprite = GetComponent<DogSpriteController>();
         dogMovement = GetComponent<DogMovement>();
-        wakeup = WakeUp();
         Messenger.RemoveListener(GlobalEvents.PLAYERS_DEATH, base.Reset);
         Messenger.AddListener(GlobalEvents.PLAYERS_DEATH, Reset);
         MaxHealth = 2;
@@ -42,7 +39,7 @@ public class DogController : EnemyController
     protected void Reset()
     {
         base.Reset();
-        StopCoroutine(wakeup);
+        StopCoroutine(WakeUp());
         Awakening = false;
     }
 
@@ -68,25 +65,27 @@ public class DogController : EnemyController
                     Attacking = 2;
                 }
             }
-            /*else if (Attacking == 0 && !Awakening && !Damaged && !Moving)
-                Moving = true;*/
         }
     }
 
     //protected override void Death() { }
+    protected override void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Ground")
+        {
+            Debug.Log(Damaged);
+            if (Damaged)
+            {
+                
+                StartCoroutine(WakeUp());
+            }
+            Damaged = false;
+        }
+    }
 
     protected void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.tag == "Ground")
-        {
-            if ((Damaged || Attacking != 0) && !Awakening)
-            {
-                StartCoroutine(WakeUp());
-            }
-            //Jumping = false;
-            Attacking = 0;
-        }
-        else if (collider.tag == "DEATH")
+        if (collider.tag == "DEATH")
         {
             movementContr.IsTrigger = false;
             Death();
@@ -101,7 +100,7 @@ public class DogController : EnemyController
     IEnumerator StopSliding()
     {
         yield return new WaitUntil(() => dogMovement.Velocity == Vector2.zero);
-        if (Attacking == 2 && !Awakening)
+        if (Attacking != 0 && !Awakening)
         {
             Attacking = 0;
             StartCoroutine(WakeUp());

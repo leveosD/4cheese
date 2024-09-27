@@ -34,10 +34,6 @@ public class EnemySpriteController : SpriteController
         get { return attacking; }
         set
         {
-            Debug.Log("Start");
-            Debug.Log(movement.Moving);
-            Debug.Log(movement.AttacksLength);
-            Debug.Log("End");
             if (value != attacking && value != 0 && value < movement.AttacksLength + 1)
             {
                 //anim.Play("Base Layer.attack" + value.ToString());
@@ -72,20 +68,20 @@ public class EnemySpriteController : SpriteController
         }
     }
 
-    [SerializeField] bool damaged;
-    public override bool Damaged
+    [SerializeField] DamageType damaged;
+    public override DamageType Damaged
     {
         get { return damaged; }
         set
         {
             damaged = value;
-            if (value == true)
+            if (value != DamageType.NONE)
             {
                 //anim.Play("Base Layer.damaged");
                 stage++;
                 /*if (stage == 1)
                     cracksSprite.sortingOrder = 0;*/
-                if (controller.Health > 0)
+                if (controller.Health > 0 && value == DamageType.PUNCH)
                 {
                     anim.Play("Base Layer." + name + "Stage" + stage);
                 }

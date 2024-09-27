@@ -25,12 +25,13 @@ public class SirMovement : Movement
             Move();
     }
 
-    protected override void Attack1()
+    protected override IEnumerator Attack1()
     {
         if (IsGrounded && !Damaged)
         {
             StartCoroutine(Push());
         }
+        yield return null;
     }
 
     IEnumerator Push()

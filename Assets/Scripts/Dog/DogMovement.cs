@@ -27,8 +27,8 @@ public class DogMovement : Movement
         ColliderState = 1;
         finalMask = 1 << LayerMask.NameToLayer("Player");
         attacks = new Attacks[2];
-        attacks[0] = new Attacks(Jump);
-        attacks[1] = new Attacks(Attack1);
+        attacks[0] = new Attacks(Attack1);
+        attacks[1] = new Attacks(Attack2);
     }
 
     void FixedUpdate()
@@ -46,17 +46,21 @@ public class DogMovement : Movement
         }
     }
 
-    protected override void Attack1() 
+    protected override IEnumerator Attack1()
     {
-        if(IsGrounded && !Damaged)
+        if (IsGrounded && !Damaged)
         {
-            StartCoroutine(Push());
+            yield return new WaitForSeconds(0.2f);
+            rb.AddForce(new Vector2(jumpForce.x * direction, jumpForce.y), ForceMode2D.Impulse);
         }
     }
 
-    IEnumerator Push()
+    IEnumerator Attack2() 
     {
-        yield return new WaitForSeconds(0.23f);
-        rb.AddForce(new Vector2(direction * 2.5f, 0), ForceMode2D.Impulse);
+        if(IsGrounded && !Damaged)
+        {
+            yield return new WaitForSeconds(0.5f);
+            rb.AddForce(new Vector2(direction * 2.5f, 0), ForceMode2D.Impulse);
+        }
     }
 }

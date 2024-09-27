@@ -20,20 +20,22 @@ public class GolemMovement : Movement
         attacks[1] = new Attacks(Attack2);
     }
 
-    protected override void Attack1()
+    protected override IEnumerator Attack1()
     {
         if (IsGrounded && !Damaged)
         {
             StartCoroutine(StrongAttack());
         }
+        yield return null;
     }
 
-    protected void Attack2()
+    protected IEnumerator Attack2()
     {
         if (IsGrounded && !Damaged)
         {
             StartCoroutine(FootAttack());
         }
+        yield return null;
     }
 
     IEnumerator StrongAttack()
