@@ -34,7 +34,7 @@ public class GentleController : EnemyController
 
     void Update()
     {
-        if (!sleepTrigger.enabled && !Damaged)
+        if (!sleepTrigger.enabled && Damaged == DamageType.NONE)
         {
             float distance = player.transform.position.x - transform.position.x;
             if (Moving)

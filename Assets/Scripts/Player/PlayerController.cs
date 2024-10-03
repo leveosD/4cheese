@@ -44,8 +44,8 @@ public class PlayerController : CharacterController
         }
     }
 
-    [SerializeField] bool damaged;
-    public override bool Damaged
+    [SerializeField] DamageType damaged;
+    public override DamageType Damaged
     {
         get { return damaged; }
         set
@@ -88,11 +88,11 @@ public class PlayerController : CharacterController
         }
 
         movementContr.direction = Input.GetAxis("Horizontal");
-        if(movementContr.direction != 0 && !Jumping && !Damaged && Attacking == 0 && !Moving)
+        if(movementContr.direction != 0 && !Jumping && Damaged == DamageType.NONE && Attacking == 0 && !Moving)
         {
             spriteContr.Moving = true;
         }
-        else if(movementContr.direction == 0 || Jumping || Damaged || Attacking == 0)
+        else if(movementContr.direction == 0 || Jumping || Damaged != DamageType.NONE || Attacking == 0)
             spriteContr.Moving = false;
     }
 
@@ -102,12 +102,12 @@ public class PlayerController : CharacterController
         playerMovement.IsTrigger = false;
         Messenger.Broadcast(GlobalEvents.PLAYERS_DEATH);
         transform.position = startPosition;
-        Damaged = false;
+        Damaged = DamageType.NONE;
     }
 
     public override void GetDamage(Vector2 force, DamageType damageType, int damage)
     {
-        Damaged = true;
+        Damaged = damageType;
         /*if (Health > 0)
             StartCoroutine(Stunned());*/
         Moving = false;
@@ -121,7 +121,7 @@ public class PlayerController : CharacterController
     {
         if (collision.collider.tag == "Ground")
         {
-            Damaged = false;
+            Damaged = DamageType.NONE;
             //Jumping = false;
         }
     }

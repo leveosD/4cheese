@@ -147,14 +147,14 @@ public abstract class Movement : MonoBehaviour
         }
     }
 
-    [SerializeField] bool damaged;
-    public bool Damaged
+    [SerializeField] DamageType damaged;
+    public DamageType Damaged
     {
         get { return damaged; }
         set
         {
             damaged = value;
-            trigger.enabled = false;
+            if (Damaged != DamageType.NONE) trigger.enabled = false;
             //ColliderState = 0;
             /*rb.velocity = Vector2.zero;
             rb.AddForce(value, ForceMode2D.Impulse);*/
@@ -182,7 +182,7 @@ public abstract class Movement : MonoBehaviour
 
     protected virtual void Move()
     {
-        if (Moving && !Damaged)
+        if (Moving && Damaged == DamageType.NONE)
         {
             /*if (direction > 0 && !moveRight || direction < 0 && !moveLeft)
                 direction = 0;*/
@@ -193,7 +193,7 @@ public abstract class Movement : MonoBehaviour
 
     protected virtual void Jump()
     {
-        if (IsGrounded && !Damaged)
+        if (IsGrounded && Damaged == DamageType.NONE)
         {
             rb.AddForce(new Vector2(jumpForce.x * direction, jumpForce.y), ForceMode2D.Impulse);
             ColliderState = 1;

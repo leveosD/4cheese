@@ -77,12 +77,9 @@ public class EnemySpriteController : SpriteController
             damaged = value;
             if (value != DamageType.NONE)
             {
-                //anim.Play("Base Layer.damaged");
-                stage++;
-                /*if (stage == 1)
-                    cracksSprite.sortingOrder = 0;*/
                 if (controller.Health > 0 && value == DamageType.PUNCH)
                 {
+                    stage++;
                     anim.Play("Base Layer." + name + "Stage" + stage);
                 }
             }

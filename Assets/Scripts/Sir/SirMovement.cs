@@ -27,7 +27,7 @@ public class SirMovement : Movement
 
     protected override IEnumerator Attack1()
     {
-        if (IsGrounded && !Damaged)
+        if (IsGrounded && Damaged == DamageType.NONE)
         {
             StartCoroutine(Push());
         }

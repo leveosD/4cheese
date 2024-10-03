@@ -18,7 +18,7 @@ public class GentleSpriteController : EnemySpriteController
 
     protected override bool IsIdle()
     {
-        if (!Damaged && Attacking == 0 && !Jumping && !Moving && !Awakening)
+        if (Damaged == DamageType.NONE && Attacking == 0 && !Jumping && !Moving && !Awakening)
             return true;
         return false;
     }

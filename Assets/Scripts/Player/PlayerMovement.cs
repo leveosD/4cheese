@@ -12,7 +12,7 @@ public class PlayerMovement : Movement
     {
         base.Start();
         //punch = this.GetComponentInChildren<Punch>();
-        speed = 17f;
+        speed = 19f;
         offset = new Vector2[] { new Vector2(0, -0.07f), new Vector2(0, 0.07f) };
         size = new Vector2[] { new Vector2(0.45f, 0.97f), new Vector2(0.45f, 0.8f) };
         groundTriggerOffset = new Vector2(-0.56f, -0.37f);
@@ -33,7 +33,7 @@ public class PlayerMovement : Movement
     protected override void Move()
     {
         direction = Input.GetAxis("Horizontal");
-        if (direction != 0 && !Damaged)
+        if (direction != 0 && Damaged == DamageType.NONE)
         {
             if (direction > 0 && !moveRight || direction < 0 && !moveLeft)
                 direction = 0;
@@ -88,7 +88,7 @@ public class PlayerMovement : Movement
 
     protected override IEnumerator Attack1()
     {
-        if (!Damaged)
+        if (Damaged == DamageType.NONE)
         {
             //punch.SetEnabled();
             if (!IsGrounded)

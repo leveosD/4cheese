@@ -34,7 +34,7 @@ public class SirController : EnemyController
 
     void Update()
     {
-        if (!sleepTrigger.enabled && !Damaged && !sirSprite.Awakening)
+        if (!sleepTrigger.enabled && Damaged == DamageType.NONE && !sirSprite.Awakening)
         {
             float distance = player.transform.position.x - transform.position.x;
             if (Moving)
@@ -51,7 +51,7 @@ public class SirController : EnemyController
                     attackCounter = 0;
                 }
             }
-            else if (Attacking == 0 && !Moving && !sleepTrigger.enabled && !Damaged)
+            else if (Attacking == 0 && !Moving)// && !sleepTrigger.enabled && Damaged == DamageType.NONE)
             {
                 Moving = true;
             }

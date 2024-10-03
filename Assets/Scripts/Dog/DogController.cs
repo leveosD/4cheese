@@ -9,6 +9,7 @@ public class DogController : EnemyController
 
     DogSpriteController dogSprite;
     DogMovement dogMovement;
+
     /*
         CircleCollider2D sleepTrigger;
         int playerMask;*/
@@ -19,8 +20,10 @@ public class DogController : EnemyController
         get { return awakening; }
         set
         {
+            //if (value == true && awakening != true) StartCoroutine(WakeUp());
             dogMovement.Awakening = value;
             dogSprite.Awakening = value;
+            awakening = value;
         }
     }
 
@@ -39,14 +42,14 @@ public class DogController : EnemyController
     protected void Reset()
     {
         base.Reset();
-        StopCoroutine(WakeUp());
+        //StopCoroutine(WakeUp());
         Awakening = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!sleepTrigger.enabled && !Damaged)
+        if (!sleepTrigger.enabled && Damaged == DamageType.NONE)
         {
             float distance = player.transform.position.x - transform.position.x;
             if (Moving)
@@ -56,14 +59,12 @@ public class DogController : EnemyController
             {
                 Moving = false;
                 AttackDelay = 2;
-                if (Mathf.Abs(distance) <= 10)
-                {
-                    Attacking = 1;
-                }
-                else
-                {
-                    Attacking = 2;
-                }
+                Attacking = Random.Range(1, 3);
+                //Awakening = true;
+            }
+            else if (Attacking == 0 && !Awakening && !Moving)
+            {
+                Awakening = true;
             }
         }
     }
@@ -73,13 +74,10 @@ public class DogController : EnemyController
     {
         if (collision.collider.tag == "Ground")
         {
-            Debug.Log(Damaged);
-            if (Damaged)
+            if (Damaged != DamageType.NONE)
             {
-                
-                StartCoroutine(WakeUp());
+                Damaged = DamageType.NONE;
             }
-            Damaged = false;
         }
     }
 
@@ -93,26 +91,33 @@ public class DogController : EnemyController
         if (sleepTrigger.IsTouchingLayers(HostileMask))
         {
             sleepTrigger.enabled = false;
-            StartCoroutine(WakeUp());
+            Moving = true;
+            //Awakening = true;
         }
     }
 
-    IEnumerator StopSliding()
+    void NotAwakening()
+    {
+        Moving = true;
+        Awakening = false;
+        Debug.Log(Awakening);
+    }
+
+    /*IEnumerator StopSliding()
     {
         yield return new WaitUntil(() => dogMovement.Velocity == Vector2.zero);
-        if (Attacking != 0 && !Awakening)
+        if (!Awakening && Damaged == DamageType.NONE)
         {
             Attacking = 0;
             StartCoroutine(WakeUp());
         }
-    }
+    }*/
 
-    IEnumerator WakeUp()
+    /*IEnumerator WakeUp()
     {
-        yield return new WaitForSeconds(0.7f);
-        Awakening = true;
+        yield return new WaitUntil(() => dogMovement.Velocity == Vector2.zero && Damaged == DamageType.NONE);
+        Attacking = 0;
         yield return new WaitForSeconds(0.7f);
         Moving = true;
-        Awakening = false;
-    }
+    }*/
 }

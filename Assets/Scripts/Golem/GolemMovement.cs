@@ -22,7 +22,7 @@ public class GolemMovement : Movement
 
     protected override IEnumerator Attack1()
     {
-        if (IsGrounded && !Damaged)
+        if (IsGrounded && Damaged == DamageType.NONE)
         {
             StartCoroutine(StrongAttack());
         }
@@ -31,7 +31,7 @@ public class GolemMovement : Movement
 
     protected IEnumerator Attack2()
     {
-        if (IsGrounded && !Damaged)
+        if (IsGrounded && Damaged == DamageType.NONE)
         {
             StartCoroutine(FootAttack());
         }

@@ -79,7 +79,7 @@ public abstract class CharacterController : MonoBehaviour
     }*/
 
     //[SerializeField] Vector2 damaged;
-    public abstract bool Damaged { get; set; }
+    public abstract DamageType Damaged { get; set; }
     /*{
         get { return damaged; }
         set

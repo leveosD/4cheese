@@ -16,7 +16,7 @@ public class GolemController : EnemyController
     // Update is called once per frame
     void Update()
     {
-        if (!sleepTrigger.enabled && !Damaged)
+        if (!sleepTrigger.enabled && Damaged == DamageType.NONE)
         {
             float distance = player.transform.position.x - transform.position.x;
             if (Moving)
@@ -35,7 +35,7 @@ public class GolemController : EnemyController
                 Attacking = 1;
                 AttackDelay = 3f;
             }
-            else if (Attacking == 0 && !Moving && !sleepTrigger.enabled && !Damaged && AttackDelay == 0 && Mathf.Abs(distance) >= 10f)
+            else if (Attacking == 0 && !Moving && !sleepTrigger.enabled && Damaged == DamageType.NONE && AttackDelay == 0 && Mathf.Abs(distance) >= 10f)
             {
                 Moving = true;
             }

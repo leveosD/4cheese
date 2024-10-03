@@ -11,8 +11,7 @@ public class DogSpriteController : EnemySpriteController
         set
         {
             awakening = value;
-            if (value == true)
-                anim.Play("Base Layer.DogAwakeningStage" + stage);
+            if(Awakening) anim.Play("Base Layer.DogAwakeningStage" + stage);
         }
     }
 
@@ -24,7 +23,7 @@ public class DogSpriteController : EnemySpriteController
 
     protected override bool IsIdle()
     {
-        if (!Damaged && Attacking == 0 && !Moving && !Awakening)
+        if (Damaged == DamageType.NONE && Attacking == 0 && !Moving && !Awakening)
             return true;
         return false;
     }

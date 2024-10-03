@@ -55,14 +55,14 @@ public class PlayerSpriteController : SpriteController
         }
     }
 
-    [SerializeField] bool damaged;
-    public override bool Damaged
+    [SerializeField] DamageType damaged;
+    public override DamageType Damaged
     {
         get { return damaged; }
         set
         {
             damaged = value;
-            if (value == true)
+            if (value != DamageType.NONE)
             {
                 anim.Play("Base Layer.damaged");
             }

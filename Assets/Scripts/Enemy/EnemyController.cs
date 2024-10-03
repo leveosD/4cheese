@@ -99,7 +99,7 @@ public class EnemyController : CharacterController
     {
         Moving = false;
         Jumping = false;
-        Damaged = false;
+        Damaged = DamageType.NONE;
         Attacking = 0;
         transform.position = startPosition;
         sleepTrigger.enabled = true;
@@ -118,7 +118,7 @@ public class EnemyController : CharacterController
         HostileMask = 1 << LayerMask.NameToLayer("Player");
         startPosition = transform.position;
         Messenger.AddListener(GlobalEvents.PLAYERS_DEATH, Reset);
-        
+        Damaged = DamageType.NONE;
         ps = GetComponent<ParticleSystem>();
         psMain = ps.main;
         Temp = 0;
@@ -140,8 +140,8 @@ public class EnemyController : CharacterController
         Moving = false;
         Attacking = 0;
         Jumping = false;
+        Damaged = damageType;
         movementContr.AddForce(force);
-        Debug.Log(damageType.ToString());
         if (damageType == DamageType.FIRE && ps != null)
         {
             if (Temp == 0)
@@ -155,17 +155,14 @@ public class EnemyController : CharacterController
         else if(damageType == DamageType.PUNCH)
         {
             Health -= damage;
-            spriteContr.Damaged = true;
         }
-        movementContr.Damaged = true;
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.tag == "Ground")
         {
-            if(gameObject.name == "DogPrefab (1)") Debug.Log("Parent");
-            Damaged = false;
+            Damaged = DamageType.NONE;
             //Jumping = false;
         }
     }

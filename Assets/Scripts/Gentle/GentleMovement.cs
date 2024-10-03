@@ -36,7 +36,7 @@ public class GentleMovement : Movement
 
     protected override IEnumerator Attack1()
     {
-        if (IsGrounded && !Damaged)
+        if (IsGrounded && Damaged == DamageType.NONE)
         {
             yield return new WaitForSeconds(0.07f);
             bullet = Instantiate(bulletPrefab);
@@ -48,7 +48,7 @@ public class GentleMovement : Movement
 
     protected IEnumerator Attack2()
     {
-        if (IsGrounded && !Damaged)
+        if (IsGrounded && Damaged == DamageType.NONE)
         {
             yield return new WaitForSeconds(0.2f);
             rb.AddForce(new Vector2(-direction * 1.2f, 0.8f), ForceMode2D.Impulse);

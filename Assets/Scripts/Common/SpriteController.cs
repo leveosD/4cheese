@@ -16,7 +16,7 @@ public abstract class SpriteController : MonoBehaviour
     public abstract bool Moving { get; set; }
     public abstract int Attacking { get; set; }
     public abstract bool Jumping { get; set; }
-    public abstract bool Damaged { get; set; }
+    public abstract DamageType Damaged { get; set; }
     
     protected void Start()
     {
@@ -30,7 +30,7 @@ public abstract class SpriteController : MonoBehaviour
     
     protected virtual bool IsIdle()
     {
-        if (!Damaged && Attacking == 0 && !Jumping && !Moving)
+        if (Damaged == DamageType.NONE && Attacking == 0 && !Jumping && !Moving)
             return true;
         return false;
     }
